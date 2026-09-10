@@ -3,28 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Otaku Channel</title>
+    <title>Otaku Channel - Anime Portal</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-dark: #0f0f11;
-            --bg-card: #18181c;
-            --bg-nav: #000000;
+            --bg-body: #090a0f;
+            --bg-surface: #12151e;
+            --bg-card: #181c28;
+            --bg-nav: rgba(9, 10, 15, 0.95);
             
-            --accent-pink: #BF40FF;
-            --badge-green: #28a745;
+            --accent-purple: #9d4edd;
+            --accent-pink: #bf40ff;
+            --accent-glow: rgba(191, 64, 255, 0.35);
             --star-yellow: #ffc107;
             
-            --text-main: #ffffff;
-            --text-muted: #8e8e93;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-sub: #64748b;
             
-            --radius: 4px;
-            --shadow: 0 4px 15px rgba(0,0,0,0.6);
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.8);
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         *, *::before, *::after {
@@ -34,51 +40,100 @@
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-body);
             color: var(--text-main);
-            font-family: 'Inter', system-ui, sans-serif;
-            line-height: 1.4;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            line-height: 1.5;
             padding-bottom: 60px;
+            -webkit-font-smoothing: antialiased;
         }
 
+        /* Glass Header */
         header {
             background-color: var(--bg-nav);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 14px 20px;
+            padding: 16px 24px;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
         .header-content {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .top-nav {
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .logo {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 800;
             color: #fff;
             text-decoration: none;
             letter-spacing: -0.5px;
         }
+        
         .logo span {
             color: var(--accent-pink);
+            background: linear-gradient(135deg, #bf40ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-trigger-btn {
+            background: var(--bg-surface);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-main);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .search-trigger-btn:hover {
+            border-color: var(--accent-pink);
+            box-shadow: 0 0 12px var(--accent-glow);
+            color: var(--accent-pink);
+        }
+
+        /* Centered Dropdown Search Wrapper */
+        .search-dropdown-wrapper {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(9, 10, 15, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 24px;
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: var(--transition);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9);
+        }
+
+        .search-dropdown-wrapper.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
 
         .search-container {
             position: relative;
             width: 100%;
-            margin-top: 4px;
+            max-width: 600px;
         }
 
         .search-input-wrap {
@@ -90,20 +145,20 @@
 
         .search-icon {
             position: absolute;
-            left: 12px;
-            color: #6c757d;
-            font-size: 0.95rem;
+            left: 16px;
+            color: var(--text-muted);
+            font-size: 1rem;
             pointer-events: none;
         }
 
         .search-input {
             width: 100%;
-            background: #e9ecef;
-            border: 2px solid transparent;
-            border-radius: 3px;
-            padding: 9px 12px 9px 36px;
-            color: #111;
-            font-size: 0.95rem;
+            background: var(--bg-surface);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-md);
+            padding: 12px 16px 12px 48px;
+            color: #fff;
+            font-size: 1rem;
             font-weight: 500;
             outline: none;
             transition: var(--transition);
@@ -111,20 +166,20 @@
 
         .search-input:focus {
             border-color: var(--accent-pink);
-            box-shadow: 0 0 10px rgba(191, 64, 255, 0.4);
-            background: #ffffff;
+            box-shadow: 0 0 18px var(--accent-glow);
+            background: rgba(24, 28, 40, 0.95);
         }
 
         .suggestions-dropdown {
             position: absolute;
-            top: 100%;
+            top: calc(100% + 10px);
             left: 0;
             right: 0;
-            background-color: #0d0d0f;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-top: none;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.95);
-            max-height: 480px;
+            background-color: var(--bg-surface);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius-md);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
+            max-height: 440px;
             overflow-y: auto;
             z-index: 200;
             display: none;
@@ -138,11 +193,10 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            padding: 10px 14px;
+            padding: 12px 16px;
             cursor: pointer;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             transition: var(--transition);
-            background-color: #0d0d0f;
         }
 
         .suggestion-item:last-child {
@@ -154,11 +208,11 @@
         }
 
         .suggestion-thumb {
-            width: 52px;
-            height: 72px;
+            width: 48px;
+            height: 64px;
             object-fit: cover;
-            border-radius: 3px;
-            background-color: #1a1a1a;
+            border-radius: 4px;
+            background-color: #000;
             flex-shrink: 0;
         }
 
@@ -179,7 +233,7 @@
         }
 
         .suggestion-meta {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
             display: flex;
             align-items: center;
@@ -195,38 +249,48 @@
             gap: 3px;
         }
 
+        /* Layout Grid */
         .container {
-            max-width: 1000px;
-            margin: 20px auto 0 auto;
-            padding: 0 16px;
+            max-width: 1200px;
+            margin: 30px auto 0 auto;
+            padding: 0 20px;
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 8px;
+            margin-bottom: 20px;
         }
 
         .section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
             color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 18px;
+            background: var(--accent-pink);
+            border-radius: 2px;
         }
 
         .poster-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 20px;
         }
 
         .pahe-card {
             background-color: var(--bg-card);
-            border-radius: var(--radius);
+            border-radius: var(--radius-md);
             overflow: hidden;
             box-shadow: var(--shadow);
             position: relative;
@@ -234,16 +298,19 @@
             flex-direction: column;
             transition: var(--transition);
             cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .pahe-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-6px);
+            border-color: rgba(191, 64, 255, 0.4);
+            box-shadow: 0 12px 25px var(--accent-glow);
         }
 
         .poster-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 140%;
+            padding-top: 142%;
             overflow: hidden;
             background-color: #000;
         }
@@ -259,34 +326,34 @@
         }
 
         .pahe-card:hover .poster-img {
-            transform: scale(1.05);
-            opacity: 0.8;
+            transform: scale(1.06);
         }
 
         .ep-badge {
             position: absolute;
-            bottom: 8px;
-            left: 8px;
-            background: var(--accent-pink);
+            top: 10px;
+            right: 10px;
+            background: rgba(9, 10, 15, 0.85);
+            backdrop-filter: blur(8px);
             color: #fff;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 2px;
-            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .card-details {
-            padding: 10px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 6px;
             flex: 1;
         }
 
         .card-title-en {
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.88rem;
+            font-weight: 700;
             color: #fff;
             white-space: nowrap;
             overflow: hidden;
@@ -294,64 +361,59 @@
         }
 
         .card-subtext {
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
             display: flex;
             justify-content: space-between;
-            margin-top: auto;
+            align-items: center;
+        }
+
+        .genre-pill {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.68rem;
         }
 
         .status-msg {
             text-align: center;
-            padding: 40px;
+            padding: 60px 20px;
             color: var(--text-muted);
             grid-column: 1 / -1;
+            font-weight: 500;
         }
 
-        /* Sponsor Card Styles */
+        /* Sponsor Section */
         .sponsor-card {
-            background-color: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 20px;
+            background: linear-gradient(135deg, rgba(24, 28, 40, 0.9), rgba(18, 21, 30, 0.9));
+            border-radius: var(--radius-lg);
+            padding: 28px;
             position: relative;
-            border-left: 4px solid var(--accent-pink);
+            border: 1px solid rgba(191, 64, 255, 0.2);
             box-shadow: var(--shadow);
-            margin-top: 30px;
+            margin-top: 40px;
         }
 
         .sponsor-header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .sponsor-tag {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 800;
             color: var(--accent-pink);
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        .settings-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .settings-btn:hover {
-            color: var(--text-main);
-        }
-
         .sponsor-logo {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 800;
             color: #fff;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             letter-spacing: -0.5px;
         }
 
@@ -360,40 +422,39 @@
         }
 
         .sponsor-desc {
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
-            line-height: 1.5;
+            line-height: 1.6;
             margin-bottom: 20px;
+            max-width: 700px;
         }
 
         .sponsor-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background: linear-gradient(135deg, #BF40FF, #8a00e6);
+            display: inline-block;
+            background: linear-gradient(135deg, #bf40ff, #7b2cbf);
             color: #fff;
             font-weight: 700;
             font-size: 0.9rem;
-            padding: 12px 20px;
-            border-radius: var(--radius);
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
             text-decoration: none;
-            box-shadow: 0 4px 12px rgba(191, 64, 255, 0.3);
+            box-shadow: 0 4px 15px var(--accent-glow);
             transition: var(--transition);
         }
 
         .sponsor-btn:hover {
-            filter: brightness(1.1);
+            filter: brightness(1.15);
             transform: translateY(-2px);
         }
 
-        /* Detailed Overlay View */
+        /* Full Overlay Detail View */
         .pahe-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: var(--bg-dark);
+            background-color: var(--bg-body);
             z-index: 1000;
             overflow-y: auto;
             display: none;
@@ -405,39 +466,40 @@
 
         .pahe-close-btn {
             position: fixed;
-            top: 16px;
-            left: 16px;
+            top: 20px;
+            left: 20px;
             z-index: 1010;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(9, 10, 15, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: #fff;
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             cursor: pointer;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
             transition: var(--transition);
         }
 
         .pahe-close-btn:hover {
             background: var(--accent-pink);
             border-color: var(--accent-pink);
+            transform: scale(1.05);
         }
 
         .hero-banner-wrap {
             position: relative;
             width: 100%;
-            min-height: 320px;
+            min-height: 380px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 40px 16px 20px 16px;
+            justify-content: flex-end;
+            padding: 60px 20px 30px 20px;
         }
 
         .hero-bg-blur {
@@ -448,69 +510,66 @@
             bottom: 0;
             background-size: cover;
             background-position: center;
-            filter: blur(25px) brightness(0.4);
-            transform: scale(1.15);
+            filter: blur(30px) brightness(0.35);
+            transform: scale(1.1);
             z-index: 1;
         }
 
         .hero-poster-box {
             position: relative;
             z-index: 2;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin-bottom: 16px;
         }
 
         .hero-poster-img {
-            width: 150px;
-            height: 220px;
+            width: 160px;
+            height: 230px;
             object-fit: cover;
-            border-radius: 6px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-md);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .hero-titles {
-            margin-top: 12px;
             text-align: center;
-            padding: 0 16px;
+            padding: 0 20px;
             z-index: 2;
         }
 
         .hero-main-title {
-            font-size: 1.3rem;
+            font-size: 1.6rem;
             font-weight: 800;
             color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: -0.5px;
         }
 
         .hero-sub-title {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            margin-top: 2px;
+            margin-top: 4px;
         }
 
         .pahe-body {
-            max-width: 800px;
-            margin: 20px auto 40px auto;
-            padding: 0 16px;
+            max-width: 860px;
+            margin: 30px auto 60px auto;
+            padding: 0 20px;
         }
 
-        .trailer-box {
+        /* Player Styling */
+        .player-container {
             position: relative;
             width: 100%;
             padding-bottom: 56.25%;
-            height: 0;
             background-color: #000;
-            border-radius: 6px;
+            border-radius: var(--radius-md);
             overflow: hidden;
-            margin: 20px 0;
+            margin-bottom: 30px;
             display: none;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .trailer-box iframe {
+        .player-container iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -519,69 +578,102 @@
             border: 0;
         }
 
-        .fullscreen-btn {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
-            background: rgba(0, 0, 0, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff;
-            width: 34px;
-            height: 34px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            z-index: 10;
-            transition: var(--transition);
-        }
-
-        .fullscreen-btn:hover {
-            background: var(--accent-pink);
-            border-color: var(--accent-pink);
-        }
-
         .synopsis-text {
-            font-size: 0.9rem;
-            color: #d1d1d6;
-            line-height: 1.6;
-            margin-bottom: 24px;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-bottom: 28px;
         }
 
-        .meta-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            font-size: 0.88rem;
-            margin-bottom: 24px;
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            background: var(--bg-surface);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 30px;
         }
 
         .meta-item {
             display: flex;
-            gap: 6px;
+            flex-direction: column;
+            gap: 2px;
         }
 
         .meta-label {
+            font-size: 0.75rem;
             font-weight: 700;
-            color: #ffffff;
-            min-width: 100px;
+            text-transform: uppercase;
+            color: var(--text-sub);
+            letter-spacing: 0.5px;
         }
 
         .meta-val {
-            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
         }
 
         .meta-val.highlight {
             color: var(--accent-pink);
-            font-weight: 600;
         }
 
-        @media (min-width: 600px) {
+        /* Episodes Section */
+        .episodes-section {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 24px;
+        }
+
+        .episodes-header {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+            gap: 10px;
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .episode-btn {
+            background-color: var(--bg-surface);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .episode-btn:hover {
+            background-color: rgba(191, 64, 255, 0.2);
+            border-color: var(--accent-pink);
+            transform: translateY(-2px);
+        }
+
+        .episode-btn.active {
+            background-color: var(--accent-pink);
+            border-color: var(--accent-pink);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        @media (min-width: 640px) {
             .hero-poster-img {
-                width: 180px;
-                height: 260px;
+                width: 190px;
+                height: 270px;
+            }
+            .hero-main-title {
+                font-size: 2rem;
             }
         }
     </style>
@@ -590,14 +682,16 @@
 
     <header>
         <div class="header-content">
-            <div class="top-nav">
-                <a href="#" class="logo"><span>Otaku</span> Channel</a>
-            </div>
+            <a href="#" class="logo"><span>Otaku</span> Channel</a>
+            <button class="search-trigger-btn" id="searchTriggerBtn" title="Search">🔍</button>
+        </div>
 
+        <!-- Center Dropdown Search Bar -->
+        <div class="search-dropdown-wrapper" id="searchDropdownWrapper">
             <div class="search-container">
                 <div class="search-input-wrap">
                     <span class="search-icon">🔍</span>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Search..." autocomplete="off">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search anime title..." autocomplete="off">
                 </div>
                 <div class="suggestions-dropdown" id="suggestionsDropdown"></div>
             </div>
@@ -606,27 +700,26 @@
 
     <main class="container">
         <div class="section-header">
-            <h2 class="section-title">Latest Releases</h2>
+            <h2 class="section-title">Popular This Season</h2>
         </div>
 
         <div class="poster-grid" id="posterGrid">
-            <div class="status-msg">Loading Anime...</div>
+            <div class="status-msg">Fetching releases...</div>
         </div>
 
-        <!-- Sponsor Card Positioned Below the Anime Grid -->
         <div class="sponsor-card">
             <div class="sponsor-header-top">
-                <span class="sponsor-tag">OFFICIAL SPONSOR</span>
-                <button class="settings-btn" title="Settings">⚙️</button>
+                <span class="sponsor-tag">Official Sponsor</span>
             </div>
             <div class="sponsor-logo">CD<span>JAPAN</span></div>
             <p class="sponsor-desc">
-                Looking for authentic anime gear? CDJapan is Tokyo's premier online store for importing official Blu-rays, manga, figure collectibles, and exclusive Japanese merchandise directly to your door with fast worldwide shipping.
+                Looking for authentic anime gear? CDJapan is Tokyo's premier online provider for importing official Blu-rays, manga releases, figure collectibles, and exclusive items directly to your door.
             </p>
-            <a href="#" class="sponsor-btn">Shop CDJapan Now</a>
+            <a href="https://www.cdjapan.co.jp/" target="_blank" rel="noopener noreferrer" class="sponsor-btn">Shop CDJapan Now</a>
         </div>
     </main>
 
+    <!-- Overlay Details View -->
     <div class="pahe-overlay" id="paheOverlay">
         <button class="pahe-close-btn" id="paheCloseBtn">&larr;</button>
 
@@ -642,24 +735,53 @@
         </div>
 
         <div class="pahe-body">
-            <div class="trailer-box" id="paheTrailerBox">
-                <iframe id="paheTrailerPlayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                <button class="fullscreen-btn" onclick="toggleLandscapeFullscreen()" title="Rotate / Fullscreen">⤢</button>
+            <div class="player-container" id="playerContainer">
+                <iframe id="videoPlayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
 
-            <p class="synopsis-text" id="paheSynopsis">Synopsis content...</p>
+            <p class="synopsis-text" id="paheSynopsis">Synopsis details go here...</p>
 
-            <div class="meta-list">
-                <div class="meta-item"><span class="meta-label">Type:</span><span class="meta-val highlight" id="metaType">TV</span></div>
-                <div class="meta-item"><span class="meta-label">Episodes:</span><span class="meta-val" id="metaEpisodes">?</span></div>
-                <div class="meta-item"><span class="meta-label">Status:</span><span class="meta-val highlight" id="metaStatus">Finished</span></div>
-                <div class="meta-item"><span class="meta-label">Rating:</span><span class="meta-val" id="metaRating">★ 8.5</span></div>
-                <div class="meta-item"><span class="meta-label">Aired:</span><span class="meta-val" id="metaAired">2006</span></div>
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <span class="meta-label">Format</span>
+                    <span class="meta-val highlight" id="metaType">TV</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Episodes</span>
+                    <span class="meta-val" id="metaEpisodes">?</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Status</span>
+                    <span class="meta-val highlight" id="metaStatus">FINISHED</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Score</span>
+                    <span class="meta-val" id="metaRating">★ 8.5</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Season / Year</span>
+                    <span class="meta-val" id="metaAired">2023</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Primary Genre</span>
+                    <span class="meta-val" id="metaGenre">Action</span>
+                </div>
+            </div>
+
+            <div class="episodes-section">
+                <div class="episodes-header">Episodes</div>
+                <div class="episodes-grid" id="episodesGrid">
+                    <div class="status-msg" style="padding: 10px;">Select to stream...</div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        const ANILIST_URL = 'https://graphql.anilist.co';
+
+        const searchTriggerBtn = document.getElementById('searchTriggerBtn');
+        const searchDropdownWrapper = document.getElementById('searchDropdownWrapper');
         const searchInput = document.getElementById('searchInput');
         const suggestionsDropdown = document.getElementById('suggestionsDropdown');
         const posterGrid = document.getElementById('posterGrid');
@@ -677,47 +799,68 @@
         const metaStatus = document.getElementById('metaStatus');
         const metaRating = document.getElementById('metaRating');
         const metaAired = document.getElementById('metaAired');
+        const metaGenre = document.getElementById('metaGenre');
         
-        const paheTrailerBox = document.getElementById('paheTrailerBox');
-        const paheTrailerPlayer = document.getElementById('paheTrailerPlayer');
+        const playerContainer = document.getElementById('playerContainer');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const episodesGrid = document.getElementById('episodesGrid');
 
-        let animeDataStore = [];
-        let suggestionsDataStore = [];
+        let currentTrailerId = '';
 
-        function getTitles(attr) {
-            const titles = attr.titles || {};
-            const englishTitle = titles.en || attr.canonicalTitle || titles.en_jp || 'Unknown Title';
-            const romajiTitle = titles.en_jp || attr.canonicalTitle || '';
-            return { englishTitle, romajiTitle };
+        // Toggle Top Search Bar
+        searchTriggerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = searchDropdownWrapper.classList.toggle('active');
+            if (isActive) {
+                searchInput.focus();
+            } else {
+                suggestionsDropdown.classList.remove('active');
+            }
+        });
+
+        // AniList Query Handler
+        async function fetchAniList(query, variables) {
+            const response = await fetch(ANILIST_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ query, variables })
+            });
+            return await response.json();
         }
 
-        function getSeasonYear(startDate) {
-            if (!startDate) return '';
-            const parts = startDate.split('-');
-            if (parts.length < 2) return parts[0];
-            const year = parts[0];
-            const month = parseInt(parts[1], 10);
-
-            let season = '';
-            if (month >= 1 && month <= 3) season = 'Winter';
-            else if (month >= 4 && month <= 6) season = 'Spring';
-            else if (month >= 7 && month <= 9) season = 'Summer';
-            else season = 'Fall';
-
-            return `${season} ${year}`;
-        }
+        const homeQuery = `
+        query {
+          Page(page: 1, perPage: 18) {
+            media(sort: TRENDING_DESC, type: ANIME) {
+              id
+              title {
+                english
+                romaji
+              }
+              coverImage {
+                extraLarge
+                large
+              }
+              bannerImage
+              episodes
+              format
+              averageScore
+              genres
+            }
+          }
+        }`;
 
         async function loadLobby() {
-            posterGrid.innerHTML = '<div class="status-msg">Loading Anime...</div>';
-            const url = `https://kitsu.io/api/edge/anime?page[limit]=18&sort=-userCount`;
-
+            posterGrid.innerHTML = '<div class="status-msg">Fetching releases...</div>';
             try {
-                const res = await fetch(url);
-                const data = await res.json();
-                animeDataStore = data.data;
-                renderAnimeGrid(data.data, posterGrid);
+                const result = await fetchAniList(homeQuery);
+                const list = result.data.Page.media;
+                renderAnimeGrid(list, posterGrid);
             } catch (err) {
-                posterGrid.innerHTML = '<div class="status-msg">Failed to load content. Check your internet connection.</div>';
+                posterGrid.innerHTML = '<div class="status-msg">Failed to retrieve datasets from AniList API.</div>';
             }
         }
 
@@ -725,28 +868,28 @@
             targetGrid.innerHTML = '';
 
             if (!animeList || animeList.length === 0) {
-                targetGrid.innerHTML = '<div class="status-msg">No items found.</div>';
+                targetGrid.innerHTML = '<div class="status-msg">No entries found.</div>';
                 return;
             }
 
             animeList.forEach((item) => {
-                const attr = item.attributes;
-                const { englishTitle } = getTitles(attr);
-                const image = attr.posterImage ? (attr.posterImage.medium || attr.posterImage.small) : '';
-                const episodes = attr.episodeCount ? `EP ${attr.episodeCount}` : 'EP ?';
-                const type = attr.showType || 'TV';
+                const title = item.title.english || item.title.romaji || 'Unknown Title';
+                const image = item.coverImage.extraLarge || item.coverImage.large;
+                const eps = item.episodes ? `EP ${item.episodes}` : 'EP ?';
+                const score = item.averageScore ? (item.averageScore / 10).toFixed(1) : 'N/A';
+                const mainGenre = item.genres && item.genres[0] ? item.genres[0] : 'Anime';
 
                 const cardHTML = `
-                    <div class="pahe-card" onclick="loadAnimeById('${item.id}')">
+                    <div class="pahe-card" onclick="loadAnimeById(${item.id})">
                         <div class="poster-wrapper">
-                            <img src="${image}" alt="${englishTitle}" class="poster-img" loading="lazy">
-                            <span class="ep-badge">${episodes}</span>
+                            <img src="${image}" alt="${title}" class="poster-img" loading="lazy">
+                            <span class="ep-badge">${eps}</span>
                         </div>
                         <div class="card-details">
-                            <div class="card-title-en" title="${englishTitle}">${englishTitle}</div>
+                            <div class="card-title-en" title="${title}">${title}</div>
                             <div class="card-subtext">
-                                <span>${type}</span>
-                                <span>★ ${attr.averageRating ? (attr.averageRating / 20).toFixed(1) : 'N/A'}</span>
+                                <span class="genre-pill">${mainGenre}</span>
+                                <span>★ ${score}</span>
                             </div>
                         </div>
                     </div>
@@ -755,53 +898,68 @@
             });
         }
 
+        const searchQuery = `
+        query ($search: String) {
+          Page(page: 1, perPage: 8) {
+            media(search: $search, type: ANIME, sort: SEARCH_MATCH) {
+              id
+              title {
+                english
+                romaji
+                native
+              }
+              coverImage {
+                medium
+              }
+              format
+              episodes
+              averageScore
+              seasonYear
+            }
+          }
+        }`;
+
         async function fetchPredictiveText(query) {
-            if (!query || query.length < 1) {
+            if (!query || query.length < 2) {
                 suggestionsDropdown.classList.remove('active');
                 return;
             }
 
-            const url = `https://kitsu.io/api/edge/anime?filter[text]=${encodeURIComponent(query)}&page[limit]=12`;
-
             try {
-                const res = await fetch(url);
-                const data = await res.json();
-                const rawList = data.data || [];
+                const result = await fetchAniList(searchQuery, { search: query });
+                
+                if (result.errors) {
+                    suggestionsDropdown.innerHTML = '<div class="suggestion-item"><span class="suggestion-title">Error fetching search results</span></div>';
+                    suggestionsDropdown.classList.add('active');
+                    return;
+                }
 
-                const queryLower = query.toLowerCase();
-                suggestionsDataStore = rawList.filter(item => {
-                    const { englishTitle, romajiTitle } = getTitles(item.attributes);
-                    return englishTitle.toLowerCase().startsWith(queryLower) || 
-                           romajiTitle.toLowerCase().startsWith(queryLower);
-                });
+                const list = result.data?.Page?.media;
 
-                if (suggestionsDataStore.length === 0) {
-                    suggestionsDropdown.innerHTML = '<div class="suggestion-item"><span class="suggestion-title">No matching anime found</span></div>';
+                if (!list || list.length === 0) {
+                    suggestionsDropdown.innerHTML = '<div class="suggestion-item"><span class="suggestion-title">No matches found</span></div>';
                     suggestionsDropdown.classList.add('active');
                     return;
                 }
 
                 suggestionsDropdown.innerHTML = '';
-                suggestionsDataStore.forEach((item) => {
-                    const attr = item.attributes;
-                    const { englishTitle } = getTitles(attr);
-                    const image = attr.posterImage ? (attr.posterImage.small || attr.posterImage.tiny) : '';
-                    
-                    const rating = attr.averageRating ? (attr.averageRating / 20).toFixed(1) : 'N/A';
-                    const type = (attr.showType || 'TV').toUpperCase();
-                    const eps = attr.episodeCount ? `${attr.episodeCount} Eps` : '? Eps';
-                    const seasonYear = getSeasonYear(attr.startDate);
+                list.forEach((item) => {
+                    const title = item.title.english || item.title.romaji || item.title.native;
+                    const image = item.coverImage.medium;
+                    const rating = item.averageScore ? (item.averageScore / 10).toFixed(1) : 'N/A';
+                    const format = item.format || 'TV';
+                    const eps = item.episodes ? `${item.episodes} Eps` : '? Eps';
 
                     const itemHTML = `
-                        <div class="suggestion-item" onclick="loadAnimeById('${item.id}')">
-                            <img src="${image}" alt="${englishTitle}" class="suggestion-thumb">
+                        <div class="suggestion-item" onclick="loadAnimeById(${item.id})">
+                            <img src="${image}" alt="${title}" class="suggestion-thumb">
                             <div class="suggestion-info">
-                                <div class="suggestion-title">${englishTitle}</div>
+                                <div class="suggestion-title">${title}</div>
                                 <div class="suggestion-meta">
                                     <span class="star-rating">★ ${rating}</span>
-                                    <span>• ${type}</span>
+                                    <span>• ${format}</span>
                                     <span>• ${eps}</span>
-                                    ${seasonYear ? `<span>• ${seasonYear}</span>` : ''}
+                                    ${item.seasonYear ? `<span>• ${item.seasonYear}</span>` : ''}
                                 </div>
                             </div>
                         </div>
@@ -811,105 +969,140 @@
 
                 suggestionsDropdown.classList.add('active');
             } catch (err) {
-                suggestionsDropdown.classList.remove('active');
+                suggestionsDropdown.innerHTML = '<div class="suggestion-item"><span class="suggestion-title">Network error. Run on a web server.</span></div>';
+                suggestionsDropdown.classList.add('active');
             }
         }
+
+        const singleAnimeQuery = `
+        query ($id: Int) {
+          Media(id: $id, type: ANIME) {
+            id
+            title {
+              english
+              romaji
+            }
+            coverImage {
+              extraLarge
+            }
+            bannerImage
+            description(asHtml: false)
+            format
+            episodes
+            status
+            averageScore
+            season
+            seasonYear
+            genres
+            trailer {
+              id
+              site
+            }
+          }
+        }`;
 
         async function loadAnimeById(id) {
             suggestionsDropdown.classList.remove('active');
+            searchDropdownWrapper.classList.remove('active');
             searchInput.value = '';
 
             try {
-                const res = await fetch(`https://kitsu.io/api/edge/anime/${id}`);
-                const data = await res.json();
-                if (data && data.data) {
-                    renderPaheViewData(data.data);
+                const result = await fetchAniList(singleAnimeQuery, { id: parseInt(id) });
+                if (result.data && result.data.Media) {
+                    renderPaheViewData(result.data.Media);
                 }
             } catch (err) {
-                console.log("Error loading anime details", err);
+                console.error("Failed to load details", err);
             }
         }
 
-        function renderPaheViewData(anime) {
-            const attr = anime.attributes;
-            const { englishTitle, romajiTitle } = getTitles(attr);
+        function renderPaheViewData(media) {
+            const title = media.title.english || media.title.romaji;
+            const subTitle = media.title.romaji || media.title.english;
+            const coverImage = media.bannerImage || media.coverImage.extraLarge;
+
+            heroBgBlur.style.backgroundImage = `url('${coverImage}')`;
+            heroPosterImg.src = media.coverImage.extraLarge;
+            heroMainTitle.textContent = title;
+            heroSubTitle.textContent = subTitle;
+
+            paheSynopsis.textContent = media.description ? media.description.replace(/<[^>]*>?/gm, '') : 'No overview text available.';
             
-            const coverImage = attr.coverImage ? attr.coverImage.large : (attr.posterImage ? attr.posterImage.original || attr.posterImage.large : '');
-            const posterImage = attr.posterImage ? (attr.posterImage.large || attr.posterImage.medium) : '';
+            metaType.textContent = media.format || 'TV';
+            metaEpisodes.textContent = media.episodes || '?';
+            metaStatus.textContent = media.status ? media.status.replace(/_/g, ' ') : 'FINISHED';
+            metaRating.textContent = media.averageScore ? `★ ${(media.averageScore / 10).toFixed(1)}` : 'N/A';
+            metaAired.textContent = media.seasonYear ? `${media.season || ''} ${media.seasonYear}` : 'N/A';
+            metaGenre.textContent = media.genres && media.genres.length > 0 ? media.genres.slice(0, 2).join(', ') : 'Anime';
 
-            heroBgBlur.style.backgroundImage = `url('${coverImage || posterImage}')`;
-            heroPosterImg.src = posterImage;
-            heroMainTitle.textContent = englishTitle;
-            heroSubTitle.textContent = romajiTitle || englishTitle;
+            currentTrailerId = (media.trailer && media.trailer.site === 'youtube') ? media.trailer.id : '';
+            
+            videoPlayer.src = '';
+            playerContainer.style.display = 'none';
 
-            paheSynopsis.textContent = attr.synopsis || 'No synopsis available.';
-            metaType.textContent = attr.showType || 'TV';
-            metaEpisodes.textContent = attr.episodeCount || '?';
-            metaStatus.textContent = attr.status ? attr.status.replace('_', ' ') : 'Finished Airing';
-            metaRating.textContent = attr.averageRating ? `★ ${(attr.averageRating / 20).toFixed(1)}` : 'N/A';
-            metaAired.textContent = getSeasonYear(attr.startDate) || (attr.startDate ? attr.startDate.split('-')[0] : 'N/A');
-
-            if (attr.youtubeVideoId) {
-                paheTrailerPlayer.src = `https://www.youtube.com/embed/${attr.youtubeVideoId}?autoplay=1`;
-                paheTrailerBox.style.display = 'block';
-            } else {
-                paheTrailerPlayer.src = '';
-                paheTrailerBox.style.display = 'none';
-            }
+            generateEpisodesList(media.episodes || 12);
 
             paheOverlay.classList.add('active');
             window.scrollTo(0, 0);
         }
 
-        async function toggleLandscapeFullscreen() {
-            const trailerBox = document.getElementById('paheTrailerBox');
-            
-            try {
-                if (!document.fullscreenElement) {
-                    if (trailerBox.requestFullscreen) {
-                        await trailerBox.requestFullscreen();
-                    } else if (trailerBox.webkitRequestFullscreen) {
-                        await trailerBox.webkitRequestFullscreen();
-                    }
+        function generateEpisodesList(totalCount) {
+            episodesGrid.innerHTML = '';
+            const renderLimit = Math.min(totalCount, 100);
 
-                    if (screen.orientation && screen.orientation.lock) {
-                        await screen.orientation.lock('landscape').catch(() => {});
-                    }
-                } else {
-                    if (document.exitFullscreen) {
-                        await document.exitFullscreen();
-                    } else if (document.webkitExitFullscreen) {
-                        await document.webkitExitFullscreen();
-                    }
-                    
-                    if (screen.orientation && screen.orientation.unlock) {
-                        screen.orientation.unlock();
-                    }
-                }
-            } catch (err) {
-                console.log("Landscape Fullscreen Error:", err);
+            for (let i = 1; i <= renderLimit; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'episode-btn';
+                btn.textContent = i;
+                btn.onclick = () => playEpisode(i, btn);
+                episodesGrid.appendChild(btn);
             }
         }
 
+        function playEpisode(epNum, btnElement) {
+            document.querySelectorAll('.episode-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            if (currentTrailerId) {
+                videoPlayer.src = `https://www.youtube.com/embed/${currentTrailerId}?autoplay=1`;
+            } else {
+                videoPlayer.src = `https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1`;
+            }
+
+            playerContainer.style.display = 'block';
+            playerContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
         function closePaheView() {
-            paheTrailerPlayer.src = '';
+            videoPlayer.src = '';
+            playerContainer.style.display = 'none';
             paheOverlay.classList.remove('active');
         }
 
         paheCloseBtn.addEventListener('click', closePaheView);
 
+        // Debounced Predictive Search with Auto-Retract on Erase
         let searchTimeout;
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.trim();
             clearTimeout(searchTimeout);
 
+            // Instantly collapse and clear search results when input is erased
+            if (!query || query.length === 0) {
+                suggestionsDropdown.classList.remove('active');
+                suggestionsDropdown.innerHTML = '';
+                return;
+            }
+
             searchTimeout = setTimeout(() => {
                 fetchPredictiveText(query);
-            }, 250);
+            }, 400);
         });
 
+        // Close search dropdown when clicking outside
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.search-container')) {
+            if (!e.target.closest('#searchDropdownWrapper') && !e.target.closest('#searchTriggerBtn')) {
+                searchDropdownWrapper.classList.remove('active');
                 suggestionsDropdown.classList.remove('active');
             }
         });
